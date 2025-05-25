@@ -61,9 +61,10 @@ class MarkdownParser():
         return ParagraphBlock(block)
     
     def to_html(self):
-        lines = []
+        lines = ["<div>"]
         for block in self.blocks:
             lines.append(block.to_html())
+        lines.append("</div>")
         return '\n'.join(lines)
     
     def to_file(self, filename):
