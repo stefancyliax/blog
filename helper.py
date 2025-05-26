@@ -2,7 +2,8 @@ import os
 import shutil
 
 
-DEBUG = True
+DEBUG = False
+
 
 def copy_folder_contents(source_folder, target_folder):
     # Ensure both paths are absolute

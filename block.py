@@ -70,7 +70,7 @@ class MarkdownParser():
 
 
 
-    def generate_page(self, template_path, dest_path):
+    def generate_page(self, template_path, dest_path, basepath="/"):
         print(f"Generation page to {dest_path} using {template_path}")
         base_dir = os.path.dirname(__file__)
         template_path = os.path.join(base_dir, template_path) 
@@ -80,6 +80,7 @@ class MarkdownParser():
         title = self.blocks[0].title 
 
         final_html = template_content.replace("{{ Title }}",title).replace("{{ Content }}",self.to_html())
+        final_html = final_html.replace('href="/',f'href="{basepath}').replace('src="/',f'src="{basepath}')
         debug_print(f"DEBUG: final_html: {final_html}")
         with open(dest_path, "w") as f:
             f.write(final_html)
