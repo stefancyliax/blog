@@ -13,13 +13,13 @@ def test_text_node():
 # --- BoldNode ---
 def test_bold_node():
     node = BoldNode("**bold**")
-    assert node.to_html() == "<strong>bold</strong>"
+    assert node.to_html() == "<b>bold</b>"
     assert repr(node) == "BoldNode(bold)"
 
 # --- ItalicNode ---
 def test_italic_node():
     node = ItalicNode("_italic_")
-    assert node.to_html() == "<em>italic</em>"
+    assert node.to_html() == "<i>italic</i>"
     assert repr(node) == "ItalicNode(italic)"
 
 # --- CodeNode ---

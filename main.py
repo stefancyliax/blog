@@ -1,4 +1,6 @@
 from block import *
+import os
+from helper import copy_folder_contents
 
 def main():
     print("Hello from blog!")
@@ -19,17 +21,23 @@ sone some more text here.
 
     md3 = "This _is_ a single **paragrpah** thi ![dog](dog.jpg) with some **bold text** and _some italic text_ and `some code` too."
 
-    doc = MarkdownParser(md2)
-    print("Parsed Markdown:")
-    print(doc.return_blocks())
+    # doc = MarkdownParser(md2)
+    # print("Parsed Markdown:")
+    # print(doc.return_blocks())
 
-    print("\n\n")
-    print(doc.to_html())
+    # print("\n\n")
+    # print(doc.to_html())
 
+    copy_folder_contents("static/","docs/")
+
+    md_content = read_file("content/index.md")
+    doc = MarkdownParser(md_content)
+    
     print("###################################")
 
 
-    doc.to_file("docs/output.html")
+
+    doc.generate_page("static/template.html","docs/index.html")
 
     # t = TextParser(md3)
     # print("Parsed Markdown:")

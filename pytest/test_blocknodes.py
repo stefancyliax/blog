@@ -48,6 +48,22 @@ def test_blockquote_block():
     assert quote_block.to_html() == expected
 
 
+def test_blockquote_block2():
+    block = """
+> "I am in fact a Hobbit in all but size."
+> 
+> -- J.R.R. Tolkien
+"""
+    quote_block = BlockQuoteBlock(block)
+    expected = '''<blockquote>
+  <p>"I am in fact a Hobbit in all but size."</p>
+  <p></p>
+  <p>-- J.R.R. Tolkien</p>
+</blockquote>'''
+    assert quote_block.to_html() == expected
+
+
+
 def test_code_block():
     block = """
 ```
@@ -72,3 +88,5 @@ def greet(name):
     code_block = CodeBlock(block)    
     excepted = '<pre><code>\ndef greet(name):\n    print(f"Hello, {name}!")\n\n</code></pre>'
     assert code_block.to_html() == excepted
+
+

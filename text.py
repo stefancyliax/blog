@@ -132,14 +132,15 @@ class BoldNode(__Node):
     def __init__(self, text):
         super().__init__(text)
         self.text = text.strip("**")
-        self.tag = "strong"
+        #self.tag = "strong"
+        self.tag = "b"
 
 
 class ItalicNode(__Node):
     def __init__(self, text):
         super().__init__(text)
         self.text = text.strip("_")
-        self.tag = "em"
+        self.tag = "i"
 
 
 class CodeNode(__Node):

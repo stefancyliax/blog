@@ -1,5 +1,6 @@
-from helper import debug_print, starts_with_number_dot
+from helper import debug_print, starts_with_number_dot, read_file
 from text import *
+import os
        
 
 class MarkdownParser():
@@ -54,7 +55,7 @@ class MarkdownParser():
             return OrderedListBlock(block)
         if block.startswith("> "): 
             for line in lines:
-                if not line.startswith("> "):
+                if not line.startswith(">"):
                     return ParagraphBlock(block)
             return BlockQuoteBlock(block)  
 
@@ -66,11 +67,23 @@ class MarkdownParser():
             lines.append(block.to_html())
         lines.append("</div>")
         return '\n'.join(lines)
-    
-    def to_file(self, filename):
-        debug_print(f"DEBUG: HTML content:\n{self.to_html()}")
-        with open(filename, "w") as f:
-            f.write(self.to_html())
+
+
+
+    def generate_page(self, template_path, dest_path):
+        print(f"Generation page to {dest_path} using {template_path}")
+        base_dir = os.path.dirname(__file__)
+        template_path = os.path.join(base_dir, template_path) 
+        template_content = read_file(template_path)
+
+        # grab title of first block. This is usually a heading. Then the heading is used. In all other cases. The type of block is used
+        title = self.blocks[0].title 
+
+        final_html = template_content.replace("{{ Title }}",title).replace("{{ Content }}",self.to_html())
+        debug_print(f"DEBUG: final_html: {final_html}")
+        with open(dest_path, "w") as f:
+            f.write(final_html)
+
 
     def print_html(self):
         print(self.to_html())
@@ -81,6 +94,7 @@ class __BlockNode():
         self.textnodes = TextParser(block).parse_text()
         self.html_tag = None
         self.html_item_tag = None
+        self.title = self.__class__
         
     def to_html(self):
         result = f"<{self.html_tag}>"
@@ -187,7 +201,7 @@ class OrderedListBlock(__BlockNode):
     def to_html(self):
         return super().to_html_list()
 
-class BlockQuoteBlock(__BlockNode):
+class BlockQuoteBlock(__BlockNode): #TODO: Does not work as expected
     def __init__(self, block):
         self.text = block
         self.textnodes = TextParser(block).parse_text_and_list()

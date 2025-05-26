@@ -150,7 +150,7 @@ For more information, [visit our website](https://example.com).
     html = parser.to_html()
     expected = """<div>
 <h1>Project Overview</h1>
-<p>Our project aims to solve the world's most pressing issues using <strong>cutting-edge AI</strong>.</p>
+<p>Our project aims to solve the world's most pressing issues using <b>cutting-edge AI</b>.</p>
 <h2>Features</h2>
 <ol>
   <li>Fast and scalable</li>
@@ -196,3 +196,27 @@ Thanks for reading!
 
     # Remove whitespace differences
     assert html.replace(" ", "").replace("\n", "") == expected_html.replace(" ", "").replace("\n", "")
+
+
+def test_blockquote_in_block():
+    markdown = '''
+Here's the deal, **I like Tolkien**.
+
+> "I am in fact a Hobbit in all but size."
+> 
+> -- J.R.R. Tolkien
+
+## Blog posts
+'''
+    parser = MarkdownParser(markdown)
+    html = parser.to_html()
+    expected ='''<div>
+<p>Here's the deal, <b>I like Tolkien</b>.</p>
+<blockquote>
+  <p>"I am in fact a Hobbit in all but size."</p>
+  <p></p>
+  <p>-- J.R.R. Tolkien</p>
+</blockquote>
+<h2>Blog posts</h2>
+</div>'''
+    assert html == expected

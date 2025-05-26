@@ -48,7 +48,7 @@ def list_files_in_directory(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
-def read_markdown_file(file_path):
+def read_file(file_path):
     """
     Read the content of a markdown file.
     
