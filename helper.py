@@ -6,6 +6,16 @@ DEBUG = False
 
 
 def copy_folder_contents(source_folder, target_folder):
+    """
+    Copies the contents of a source folder to a target folder.
+
+    The target folder is cleaned up before copying. If the target folder
+    doesn't exist, it will be created.
+
+    Args:
+        source_folder (str): The path to the source folder.
+        target_folder (str): The path to the target folder.
+    """
     # Ensure both paths are absolute
     source_folder = os.path.abspath(source_folder)
     target_folder = os.path.abspath(target_folder)
@@ -35,11 +45,14 @@ def copy_folder_contents(source_folder, target_folder):
 
 def list_files_in_directory(directory, pattern):
     """
-    List all files in a directory matching a specific pattern.
+    Lists all files in a directory that match a specific pattern.
     
-    :param directory: Directory to search in.
-    :param pattern: Pattern to match files against.
-    :return: List of matching file paths.
+    Args:
+        directory (str): The directory to search in.
+        pattern (str): The pattern to match files against (e.g., "*.txt").
+    
+    Returns:
+        list: A list of file paths for the matching files.
     """
     import fnmatch
 
@@ -51,19 +64,40 @@ def list_files_in_directory(directory, pattern):
 
 def read_file(file_path):
     """
-    Read the content of a markdown file.
+    Reads the content of a file.
     
-    :param file_path: Path to the markdown file.
-    :return: Content of the file as a string.
+    Args:
+        file_path (str): The path to the file.
+        
+    Returns:
+        str: The content of the file as a string.
     """
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
 def debug_print(msg):
+    """
+    Prints a message to the console if the DEBUG flag is True.
+
+    Args:
+        msg (str): The message to print.
+    """
     if DEBUG:
         print(msg)
 
 def starts_with_number_dot(s):
+    """
+    Checks if a string starts with a number followed by a dot.
+
+    This is used to identify ordered list items (e.g., "1.", "2.").
+    It checks up to the first 4 characters of the string.
+
+    Args:
+        s (str): The string to check.
+
+    Returns:
+        bool: True if the string starts with a number followed by a dot, False otherwise.
+    """
     if s == "" or not s[0].isdigit():
         return False
     parts = s[:4].split('.', 1)

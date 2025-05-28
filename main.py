@@ -4,7 +4,16 @@ from helper import copy_folder_contents, list_files_in_directory
 import sys
 
 def main():
+    """
+    Main function for the static site generator.
 
+    This function performs the following steps:
+    1. Sets the basepath for URLs (defaults to "/" or can be provided as a command-line argument).
+    2. Copies the contents of the "static/" folder to "docs/".
+    3. Parses "content/index.md", generates an HTML page using "static/template.html", and saves it to "docs/index.html".
+    4. Parses "content/contact/contact.md", generates an HTML page, and saves it to "docs/contact/index.html".
+    5. Finds all markdown files in "content/articles/", parses each, generates an HTML page, and saves them to "docs/blog/<article_name>/index.html".
+    """
     basepath = sys.argv[1] if len(sys.argv) > 1 else "/"
 
     print("Hello from blog!")
