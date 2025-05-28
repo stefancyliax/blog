@@ -16,12 +16,15 @@ def test_markdown_to_html(md_filename, html_filename):
     md_path = os.path.join(base_dir, md_filename)
     html_path = os.path.join(base_dir, html_filename)
 
+    assert os.path.exists(md_path), f"Markdown file not found: {md_path}"
+    assert os.path.exists(html_path), f"Expected HTML file not found: {html_path}"
+
     # Read and parse markdown
     markdown = read_file(md_path)
     parser = MarkdownParser(markdown)
-    result_html = parser.to_html().strip()
+    result_html = parser.to_html()
 
     # Read expected output
     expected_html = read_file(html_path)
 
-    assert result_html == expected_html
+    assert result_html == expected_html, "Mismatch in HTML output"

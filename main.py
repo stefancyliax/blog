@@ -31,7 +31,10 @@ def main():
         os.makedirs(f"docs/blog/{folder_name}", exist_ok=True)
         doc.generate_page("static/template.html", f"docs/blog/{folder_name}/index.html", basepath)
 
-    #TODO: referencing the .css in the subfolders is not working
+    # TODO: automatic listing and parsing of all files in content/blog/ and other
+    # TODO: strip out boot.dev stuff
+    # TODO: automatic detection of test cases in test_parsefile.py
+    
 
     # t = TextParser(md3)
     # print("Parsed Markdown:")
