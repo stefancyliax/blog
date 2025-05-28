@@ -59,9 +59,19 @@ class TextParser():
     def parse_list(self):
         result = []
         for node in self.textnodes:
-            if node.text.startswith("- ") or node.text.startswith("* ") or node.text.startswith("> "):
+            if node.text.startswith("- ") or node.text.startswith("* "):
                 result.append(ListItemNode())
-                result.append(TextNode(node.text[2:])) 
+                result.append(TextNode(node.text[2:]))
+            elif node.text.startswith(">"): # Handles ">", "> ", ">text"
+                text_after_marker = ""
+                if len(node.text) > 1:
+                    if node.text[1] == ' ': # Case: "> text"
+                        text_after_marker = node.text[2:]
+                    else: # Case: ">text" (no space after >)
+                        text_after_marker = node.text[1:]
+                # Case: ">" (just the marker) is covered, text_after_marker remains ""
+                result.append(ListItemNode())
+                result.append(TextNode(text_after_marker))
             elif starts_with_number_dot(node.text): 
                  result.append(ListItemNode())
                  result.append(TextNode(node.text.split('.', 1)[1].strip()))

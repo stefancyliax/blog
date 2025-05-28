@@ -72,8 +72,7 @@ class MarkdownParser():
 
     def generate_page(self, template_path, dest_path, basepath="/"):
         print(f"Generation page to {dest_path} using {template_path}")
-        base_dir = os.path.dirname(__file__)
-        template_path = os.path.join(base_dir, template_path) 
+        # template_path is now expected to be a full, resolved path
         template_content = read_file(template_path)
 
         # grab title of first block. This is usually a heading. Then the heading is used. In all other cases. The type of block is used
