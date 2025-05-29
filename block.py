@@ -1,4 +1,4 @@
-from helper import debug_print, starts_with_number_dot, read_file
+from helper import debug_print, starts_with_number_dot, read_file, LOG_LEVEL_DEBUG
 from text import *
 import os
        
@@ -21,21 +21,21 @@ class MarkdownParser():
         blocks = markdown.split("\n\n")
         blocks = list(map(lambda x : x.strip(), blocks))
         blocks = list(filter(None, blocks))
-        #debug_print(f"DEBUG split blocks to: {blocks}")
+        #debug_print(f"DEBUG split blocks to: {blocks}", LOG_LEVEL_DEBUG)
         return blocks
 
     def parse_markdown(self, blocks):
         if blocks == []: 
             return
-        debug_print("\n##########################")
-        debug_print(f"Starting parsing on on {blocks}")
+        debug_print("\n##########################", LOG_LEVEL_DEBUG)
+        debug_print(f"Starting parsing on on {blocks}", LOG_LEVEL_DEBUG)
 
         for block in blocks:
             self.add_block(self.parse_block(block))
 
     def parse_block(self, block):
         lines = block.split("\n")
-        debug_print(f"DEBUG parsing block: {block}")
+        debug_print(f"DEBUG parsing block: {block}", LOG_LEVEL_DEBUG)
         
         if block.startswith("#"):
             return HeadingBlock(block)
@@ -81,7 +81,7 @@ class MarkdownParser():
 
         final_html = template_content.replace("{{ Title }}",title).replace("{{ Content }}",self.to_html())
         final_html = final_html.replace('href="/',f'href="{basepath}').replace('src="/',f'src="{basepath}')
-        debug_print(f"DEBUG: final_html: {final_html}")
+        debug_print(f"DEBUG: final_html: {final_html}", LOG_LEVEL_DEBUG)
         with open(dest_path, "w") as f:
             f.write(final_html)
 

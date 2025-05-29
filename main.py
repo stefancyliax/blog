@@ -1,6 +1,6 @@
 from block import *
 import os
-from helper import copy_folder_contents, list_files_in_directory
+from helper import copy_folder_contents, list_files_in_directory, LOG_LEVEL_INFO, debug_print
 import sys
 
 def main():
@@ -22,7 +22,7 @@ def main():
     doc.generate_page("static/template.html", "docs/contact/index.html", basepath)
 
     article_list = list_files_in_directory("content/articles", "*.md")
-    debug_print(f"Found {len(article_list)} articles.")
+    debug_print(f"Found {len(article_list)} articles.", LOG_LEVEL_INFO)
     for article in article_list:
         print(f"Processing article: {article}")
         content = read_file(article)

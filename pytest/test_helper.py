@@ -1,5 +1,10 @@
 import pytest
-from helper import starts_with_number_dot  
+from helper import starts_with_number_dot, debug_print
+import helper as helper_module  # To access and modify CURRENT_LOG_LEVEL
+
+# Import log levels directly for use in tests
+from helper import LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_WARNING, LOG_LEVEL_ERROR
+
 
 @pytest.mark.parametrize("input_str,expected", [
     ("1. item", True),
@@ -27,5 +32,77 @@ from helper import starts_with_number_dot
 
 def test_starts_with_number_dot(input_str, expected):
     assert starts_with_number_dot(input_str) == expected
+
+
+# Tests for debug_print
+def test_debug_print_debug_when_current_is_debug(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_DEBUG
+    try:
+        debug_print("Test message", LOG_LEVEL_DEBUG)
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_info_when_current_is_debug(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_DEBUG
+    try:
+        debug_print("Test message", LOG_LEVEL_INFO)
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_info_when_current_is_info(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
+    try:
+        debug_print("Test message", LOG_LEVEL_INFO)
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_debug_not_printed_when_current_is_info(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
+    try:
+        debug_print("Test message", LOG_LEVEL_DEBUG)
+        captured = capsys.readouterr()
+        assert "Test message" not in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_warning_when_current_is_info(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
+    try:
+        debug_print("Test message", LOG_LEVEL_WARNING)
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_error_when_current_is_error(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_ERROR
+    try:
+        debug_print("Test message", LOG_LEVEL_ERROR)
+        captured = capsys.readouterr()
+        assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_debug_print_warning_not_printed_when_current_is_error(capsys):
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_ERROR
+    try:
+        debug_print("Test message", LOG_LEVEL_WARNING)
+        captured = capsys.readouterr()
+        assert "Test message" not in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
 
 

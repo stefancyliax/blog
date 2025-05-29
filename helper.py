@@ -1,8 +1,13 @@
+LOG_LEVEL_DEBUG = 1
+LOG_LEVEL_INFO = 2
+LOG_LEVEL_WARNING = 3
+LOG_LEVEL_ERROR = 4
+
 import os
 import shutil
 
 
-DEBUG = False
+CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
 
 
 def copy_folder_contents(source_folder, target_folder):
@@ -59,8 +64,8 @@ def read_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
-def debug_print(msg):
-    if DEBUG:
+def debug_print(msg, level):
+    if level >= CURRENT_LOG_LEVEL:
         print(msg)
 
 def starts_with_number_dot(s):
