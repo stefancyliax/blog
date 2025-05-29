@@ -1,8 +1,14 @@
+LOG_LEVEL_DEBUG = 1
+LOG_LEVEL_INFO = 2
+LOG_LEVEL_WARNING = 3
+LOG_LEVEL_ERROR = 4
+
 import os
 import shutil
+import sys
 
 
-DEBUG = False
+CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
 
 
 def copy_folder_contents(source_folder, target_folder):
@@ -59,8 +65,8 @@ def read_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
-def debug_print(msg):
-    if DEBUG:
+def debug_print(msg, level):
+    if level >= CURRENT_LOG_LEVEL:
         print(msg)
 
 def starts_with_number_dot(s):
@@ -68,3 +74,23 @@ def starts_with_number_dot(s):
         return False
     parts = s[:4].split('.', 1)
     return len(parts) > 1 and parts[0].isdigit()
+
+def set_log_level_from_string(level_str):
+    """
+    Sets the global CURRENT_LOG_LEVEL based on a string input.
+    Defaults to LOG_LEVEL_INFO if the string is invalid.
+    """
+    global CURRENT_LOG_LEVEL
+    level_str_upper = level_str.upper()
+
+    if level_str_upper == "DEBUG":
+        CURRENT_LOG_LEVEL = LOG_LEVEL_DEBUG
+    elif level_str_upper == "INFO":
+        CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
+    elif level_str_upper == "WARNING":
+        CURRENT_LOG_LEVEL = LOG_LEVEL_WARNING
+    elif level_str_upper == "ERROR":
+        CURRENT_LOG_LEVEL = LOG_LEVEL_ERROR
+    else:
+        CURRENT_LOG_LEVEL = LOG_LEVEL_INFO
+        print(f"Warning: Invalid log level string '{level_str}'. Defaulting to INFO.", file=sys.stderr)

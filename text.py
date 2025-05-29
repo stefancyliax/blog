@@ -1,5 +1,5 @@
 import re
-from helper import debug_print, starts_with_number_dot
+from helper import debug_print, starts_with_number_dot, LOG_LEVEL_DEBUG
 
 class TextParser():
     def __init__(self, text):
@@ -11,13 +11,13 @@ class TextParser():
             f_nodes = []
             if line.strip() == "":
                 continue
-            debug_print(f"DEBUG parsing line: {line}")
+            debug_print(f"DEBUG parsing line: {line}", LOG_LEVEL_DEBUG)
 
-            debug_print(f"DEBUG bold: {self.extract_bold(line)}")
-            debug_print(f"DEBUG italic: {self.extract_italic(line)}")
-            debug_print(f"DEBUG inline_code: {self.extract_inline_code(line)}")
-            debug_print(f"DEBUG links: {self.extract_links(line)}")
-            debug_print(f"DEBUG images: {self.extract_images(line)}")
+            debug_print(f"DEBUG bold: {self.extract_bold(line)}", LOG_LEVEL_DEBUG)
+            debug_print(f"DEBUG italic: {self.extract_italic(line)}", LOG_LEVEL_DEBUG)
+            debug_print(f"DEBUG inline_code: {self.extract_inline_code(line)}", LOG_LEVEL_DEBUG)
+            debug_print(f"DEBUG links: {self.extract_links(line)}", LOG_LEVEL_DEBUG)
+            debug_print(f"DEBUG images: {self.extract_images(line)}", LOG_LEVEL_DEBUG)
 
             f_nodes.extend(self.extract_bold(line))
             f_nodes.extend(self.extract_italic(line))
@@ -27,7 +27,7 @@ class TextParser():
             #f_nodes.extend(self.extract_newlines(line)) #TODO: remove?!
 
             f_nodes = sorted(f_nodes,key=lambda x: x[0])
-            debug_print(f"DEBUG: f_nodes {f_nodes}")
+            debug_print(f"DEBUG: f_nodes {f_nodes}", LOG_LEVEL_DEBUG)
 
             marker = 0
             for node in f_nodes:
@@ -52,7 +52,7 @@ class TextParser():
             if marker != len(line):
                 self.textnodes.append(TextNode(line[marker:]))
 
-        debug_print(f"DEBUG: textnodes: {self.textnodes}")
+        debug_print(f"DEBUG: textnodes: {self.textnodes}", LOG_LEVEL_DEBUG)
         return self.textnodes
     
     
@@ -183,13 +183,13 @@ class ImageNode(__Node):
         return f'<{self.tag} src="{self.url}" alt="{self.text}" />'
 
     def extract_url(self): 
-        debug_print(f"DEBUG: extracting url: {self.text}")
+        debug_print(f"DEBUG: extracting url: {self.text}", LOG_LEVEL_DEBUG)
         pattern = r'!\[(.*?)\]\((.*?)\)'
         match = re.match(pattern, self.text)
-        debug_print(f"DEBUG: match: {match}")
+        debug_print(f"DEBUG: match: {match}", LOG_LEVEL_DEBUG)
         if match:
             text, url = match.groups()
-            debug_print(f"DEBUG: extracted url: {text} and {url}")
+            debug_print(f"DEBUG: extracted url: {text} and {url}", LOG_LEVEL_DEBUG)
             return text, url
         raise Exception("Invalid image format")
     
