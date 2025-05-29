@@ -1,5 +1,5 @@
 import pytest
-from helper import starts_with_number_dot, debug_print
+from helper import starts_with_number_dot, debug_print, set_log_level_from_string
 import helper as helper_module  # To access and modify CURRENT_LOG_LEVEL
 
 # Import log levels directly for use in tests
@@ -52,6 +52,52 @@ def test_debug_print_info_when_current_is_debug(capsys):
         debug_print("Test message", LOG_LEVEL_INFO)
         captured = capsys.readouterr()
         assert "Test message" in captured.out
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+
+# Tests for set_log_level_from_string
+def test_set_log_level_debug():
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    try:
+        set_log_level_from_string("DEBUG")
+        assert helper_module.CURRENT_LOG_LEVEL == LOG_LEVEL_DEBUG
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_set_log_level_info_lowercase():
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    try:
+        set_log_level_from_string("info")
+        assert helper_module.CURRENT_LOG_LEVEL == LOG_LEVEL_INFO
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_set_log_level_warning():
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    try:
+        set_log_level_from_string("WARNING")
+        assert helper_module.CURRENT_LOG_LEVEL == LOG_LEVEL_WARNING
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_set_log_level_error():
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    try:
+        set_log_level_from_string("ERROR")
+        assert helper_module.CURRENT_LOG_LEVEL == LOG_LEVEL_ERROR
+    finally:
+        helper_module.CURRENT_LOG_LEVEL = original_level
+
+def test_set_log_level_invalid_string(capsys): # capsys or capfd for stderr
+    original_level = helper_module.CURRENT_LOG_LEVEL
+    # Set a different starting level to ensure it changes to INFO on invalid input
+    helper_module.CURRENT_LOG_LEVEL = LOG_LEVEL_DEBUG
+    try:
+        set_log_level_from_string("INVALID_LEVEL")
+        assert helper_module.CURRENT_LOG_LEVEL == LOG_LEVEL_INFO
+        captured = capsys.readouterr() # Use capsys for stderr
+        assert "Warning: Invalid log level string 'INVALID_LEVEL'. Defaulting to INFO." in captured.err
     finally:
         helper_module.CURRENT_LOG_LEVEL = original_level
 
