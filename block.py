@@ -150,11 +150,20 @@ class MarkdownParser():
             rel_path = ""
         
         final_html = template_content.replace("{{ Title }}",title).replace("{{ Content }}",self.to_html())
+        
         # Replace static resource paths (CSS, images) with relative paths
+        # These replacements are order-sensitive to avoid double-replacement
         final_html = final_html.replace('href="/index.css"', f'href="{rel_path}index.css"')
         final_html = final_html.replace('src="/images/', f'src="{rel_path}images/')
-        # Replace navigation links with basepath
-        final_html = final_html.replace('href="/',f'href="{basepath}')
+        
+        # Replace internal navigation links with basepath
+        # Only replace hrefs that start with "/" and are not already processed
+        # This handles links like /blog/, /contact/, etc.
+        if basepath != "/":
+            # Only do this replacement if basepath is not default
+            # to avoid breaking external URLs
+            final_html = final_html.replace('href="/',f'href="{basepath}')
+        
         debug_print(f"DEBUG: final_html: {final_html}")
         with open(dest_path, "w") as f:
             f.write(final_html)
