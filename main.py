@@ -104,8 +104,6 @@ def main():
             f.write(index_content)
         print(f"Updated {index_html_path} with links to other pages.")
 
-    #TODO: referencing the .css in the subfolders is not working
-
     # t = TextParser(md3)
     # print("Parsed Markdown:")
     # t.parse_text()

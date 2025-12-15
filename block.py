@@ -138,8 +138,32 @@ class MarkdownParser():
         # grab title of first block. This is usually a heading. Then the heading is used. In all other cases. The type of block is used
         title = self.blocks[0].title 
 
+        # Calculate relative path from dest_path to docs/ root for static resources
+        # Count the directory depth from docs/ folder
+        dest_relative = os.path.relpath(dest_path, "docs/")
+        depth = dest_relative.count(os.sep)
+        if depth > 0:
+            # If in subdirectory, use relative path
+            rel_path = "../" * depth
+        else:
+            # If in docs root, use current directory
+            rel_path = ""
+        
         final_html = template_content.replace("{{ Title }}",title).replace("{{ Content }}",self.to_html())
-        final_html = final_html.replace('href="/',f'href="{basepath}').replace('src="/',f'src="{basepath}')
+        
+        # Replace static resource paths (CSS, images) with relative paths
+        # These replacements are order-sensitive to avoid double-replacement
+        final_html = final_html.replace('href="/index.css"', f'href="{rel_path}index.css"')
+        final_html = final_html.replace('src="/images/', f'src="{rel_path}images/')
+        
+        # Replace internal navigation links with basepath
+        # Only replace hrefs that start with "/" and are not already processed
+        # This handles links like /blog/, /contact/, etc.
+        if basepath != "/":
+            # Only do this replacement if basepath is not default
+            # to avoid breaking external URLs
+            final_html = final_html.replace('href="/',f'href="{basepath}')
+        
         debug_print(f"DEBUG: final_html: {final_html}")
         with open(dest_path, "w") as f:
             f.write(final_html)
